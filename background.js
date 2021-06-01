@@ -17,11 +17,14 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 		chrome.action.setBadgeText({
 			text: `${time + 1}`
 		});
-		if (time % 1000 == 0) {
-			this.registration.showNotification("Chrome Timer Extension", {
-				body: "10 second has passed!",
-				icon: "icon.png",
-			})
-		}
+		chrome.storage.sync.get(["notificationTime"], (res) => {
+			const notificationTime = res.notificationTime ?? 1000;
+			if (time % notificationTime == 0) {
+				this.registration.showNotification("Chrome Timer Extension", {
+					body: `${notificationTime} second has passed!`,
+					icon: "icon.png",
+				})
+			}
+		});
 	});
 });
